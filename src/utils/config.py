@@ -13,7 +13,7 @@ class Config:
     # Minimax API Configuration
     MINIMAX_API_KEY = os.getenv("MINIMAX_API_KEY")
     MINIMAX_BASE_URL = "https://api.minimax.io/anthropic"
-    MINIMAX_MODEL = "MiniMax-M2"
+    MINIMAX_MODEL = "MiniMax-M2.1"
 
     # OpenRouter API Configuration
     OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")

@@ -1,10 +1,10 @@
-# MiniMax-M2 Deep Research Agent
+# MiniMax-M2.1 Deep Research Agent
 
-A sophisticated research tool powered by **Minimax M2** with interleaved thinking, **Exa** neural search, and multi-agent orchestration.
+A sophisticated research tool powered by **Minimax M2.1** with interleaved thinking, **Exa** neural search, and multi-agent orchestration.
 
 ## Features
 
-- **Minimax M2 Supervisor**: Uses interleaved thinking to maintain reasoning state across multi-step research
+- **Minimax M2.1 Supervisor**: Uses interleaved thinking to maintain reasoning state across multi-step research
 - **Intelligent Planning**: Automatically decomposes research queries into optimized subqueries
 - **Neural Web Search**: Leverages Exa API for high-quality, AI-powered web search
 - **Comprehensive Reports**: Generates detailed research reports with citations and analysis
@@ -15,7 +15,7 @@ A sophisticated research tool powered by **Minimax M2** with interleaved thinkin
 ```
 +-----------------------------------------------+
 |            Supervisor Agent                   |
-|    (Minimax M2 + Interleaved Thinking)        |
+|    (Minimax M2.1 + Interleaved Thinking)      |
 +-----------------------------------------------+
                       |
        +--------------+--------------+
@@ -23,7 +23,7 @@ A sophisticated research tool powered by **Minimax M2** with interleaved thinkin
        v              v              v
 +------------+ +-------------+ +-----------+
 |  Planning  | | Web Search  | | Synthesis |
-|   Agent    | |  Retriever  | |   (M2)    |
+|   Agent    | |  Retriever  | |  (M2.1)   |
 |  (Gemini)  | |             | |           |
 +------------+ +-------------+ +-----------+
                       |
@@ -35,31 +35,39 @@ A sophisticated research tool powered by **Minimax M2** with interleaved thinkin
 
 ### Agent Descriptions
 
-1. **Supervisor Agent**:
-   - Uses Minimax M2 with Anthropic SDK
-   - Implements interleaved thinking (preserves reasoning across turns)
-   - Coordinates planning, search, and synthesis
-   - Generates final comprehensive research report
+| Agent | Model | Role |
+|-------|-------|------|
+| **Supervisor** | Minimax M2.1 | Coordinates workflow, synthesizes final report |
+| **Planning** | Gemini 2.5 Flash | Generates optimized subqueries |
+| **Web Search** | Gemini 2.5 Flash + Exa | Executes searches, organizes findings |
 
-2. **Planning Agent**:
-   - Uses Gemini 2.5 Flash via OpenRouter
-   - Generates 3-5 Exa-optimized subqueries
-   - Considers time periods, domains, content types, and priorities
+---
 
-3. **Web Search Retriever**:
-   - Uses Gemini 2.5 Flash for synthesis
-   - Executes Exa searches with neural search capabilities
-   - Finds similar content using Exa's similarity search
-   - Organizes findings with sources and highlights
+## Quick Start
+
+```bash
+# Clone and setup
+cd deep-research-agent
+uv sync
+
+# Configure API keys
+cp .env.example .env
+# Edit .env with your keys
+
+# Run
+uv run python main.py -q "Your research query here"
+```
+
+---
 
 ## Installation
 
 ### Prerequisites
 
-- Python 3.9+
+- Python 3.12+
 - [uv](https://github.com/astral-sh/uv) package manager
 - API keys for:
-  - Minimax (M2 model)
+  - Minimax (M2.1 model)
   - OpenRouter (for Gemini)
   - Exa (web search)
 
@@ -73,90 +81,76 @@ uv sync
 
 2. **Configure environment variables**:
 ```bash
-# Copy the example file
 cp .env.example .env
+```
 
-# Edit .env and add your API keys
+Edit `.env` and add your API keys:
+```
 MINIMAX_API_KEY=your_minimax_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 EXA_API_KEY=your_exa_api_key_here
 ```
 
-3. **Activate virtual environment** (if needed):
-```bash
-source .venv/bin/activate
-```
+---
 
 ## Usage
 
 ### Interactive Mode
 
-Run without arguments to enter interactive mode:
-
 ```bash
-python main.py
+uv run python main.py
 ```
 
-Then enter your research queries at the prompt:
-
-```
-Research Query: What are the latest developments in quantum computing?
-```
+Then enter your research queries at the prompt.
 
 ### Single Query Mode
 
-Run a single research query:
-
 ```bash
-python main.py -q "What are the latest developments in quantum computing?"
+uv run python main.py -q "What are the latest developments in quantum computing?"
 ```
 
 ### Save Report to File
 
-Save the research report automatically:
-
 ```bash
-python main.py -q "AI trends in 2025" --save
+uv run python main.py -q "AI trends in 2025" --save
 ```
 
 ### Verbose Mode
 
-Show detailed progress and thinking blocks:
-
 ```bash
-python main.py -q "Climate change solutions" --verbose
+uv run python main.py -q "Climate change solutions" --verbose
 ```
 
-### Interactive Mode Commands
+### CLI Options
 
-While in interactive mode, you can use these commands:
+| Option | Description |
+|--------|-------------|
+| `-q, --query` | Research query (skips interactive mode) |
+| `-s, --save` | Save report to `reports/` folder |
+| `-v, --verbose` | Show detailed progress and thinking blocks |
 
-- `/save <query>` - Save the report to a file
-- `/verbose <query>` - Show detailed progress
-- `/help` - Show help message
-- `exit`, `quit`, or `q` - Exit the program
+### Interactive Commands
+
+| Command | Description |
+|---------|-------------|
+| `/save <query>` | Save the report to a file |
+| `/verbose <query>` | Show detailed progress |
+| `/help` | Show help message |
+| `exit`, `quit`, `q` | Exit the program |
+
+---
 
 ## How It Works
 
 ### 1. Query Planning
 
-When you submit a research query, the **Planning Agent** decomposes it into 3-5 optimized subqueries:
+The **Planning Agent** decomposes your query into 3-5 optimized subqueries:
 
 ```json
 {
   "subqueries": [
-    {
-      "query": "quantum computing breakthroughs 2025",
-      "type": "news",
-      "time_period": "recent",
-      "priority": 1
-    },
-    {
-      "query": "quantum computing applications cryptography",
-      "type": "auto",
-      "time_period": "any",
-      "priority": 2
-    }
+    {"query": "quantum computing breakthroughs 2025", "type": "news", "priority": 1},
+    {"query": "quantum computing applications cryptography", "type": "auto", "priority": 2}
   ]
 }
 ```
@@ -164,159 +158,118 @@ When you submit a research query, the **Planning Agent** decomposes it into 3-5 
 ### 2. Web Search
 
 The **Web Search Retriever** executes each subquery using Exa:
-
 - Performs neural search for each subquery
 - Finds similar content for high-priority results
 - Extracts highlights and key information
-- Organizes findings by relevance
 
 ### 3. Synthesis
 
-The **Supervisor Agent** (using Minimax M2 with interleaved thinking):
-
-- Receives all search findings
-- Maintains reasoning state across the research process
-- Synthesizes a comprehensive report with:
+The **Supervisor Agent** (Minimax M2.1):
+- Maintains reasoning state via interleaved thinking
+- Synthesizes comprehensive report with:
+  - Table of contents
+  - Key takeaways
   - Executive summary
-  - Key findings organized by theme
   - Detailed analysis
-  - Cited sources with URLs
+  - Cited sources
 
 ### 4. Interleaved Thinking
 
-The key innovation is **interleaved thinking**:
+The key innovation: the supervisor preserves ALL content blocks (thinking + text + tool_use) in conversation history. This maintains the reasoning chain across multiple turns for more coherent reports.
 
-- The supervisor preserves ALL content blocks (thinking + text + tool_use) in conversation history
-- This maintains the reasoning chain across multiple turns
-- Results in more coherent, contextualized research reports
-- Prevents "state drift" in multi-step workflows
+---
 
 ## Project Structure
 
 ```
 deep-research-agent/
-├── README.md                  # This file
-├── .env.example               # Environment variables template
-├── .env                       # Your API keys (create this)
-├── pyproject.toml             # Project dependencies
 ├── main.py                    # CLI entry point
+├── .env.example               # Environment template
+├── pyproject.toml             # Dependencies
 └── src/
     ├── agents/
-    │   ├── supervisor.py           # Minimax M2 supervisor
+    │   ├── supervisor.py           # Minimax M2.1 supervisor
     │   ├── planning_agent.py       # Query planning
     │   └── web_search_retriever.py # Exa search integration
     ├── tools/
     │   └── exa_tool.py             # Exa API wrapper
     └── utils/
-        └── config.py               # Configuration management
+        └── config.py               # Configuration
 ```
+
+---
 
 ## API Keys
 
 ### Getting API Keys
 
-1. **Minimax M2**: Sign up at [platform.minimax.io](https://platform.minimax.io)
-2. **OpenRouter**: Get key at [openrouter.ai](https://openrouter.ai)
-3. **Exa**: Register at [exa.ai](https://exa.ai)
+| Service | URL | Purpose |
+|---------|-----|---------|
+| Minimax M2.1 | [platform.minimax.io](https://platform.minimax.io) | Supervisor reasoning |
+| OpenRouter | [openrouter.ai](https://openrouter.ai) | Planning agent (Gemini) |
+| Exa | [exa.ai](https://exa.ai) | Neural web search |
 
-### Why These Services?
-
-- **Minimax M2**: Advanced reasoning model with native interleaved thinking support
-- **OpenRouter**: Unified API for accessing Gemini and other LLMs
-- **Exa**: Neural search engine optimized for research and discovery
+---
 
 ## Examples
 
-### Example 1: Technology Research
-
+### Technology Research
 ```bash
-python main.py -q "What are the latest breakthroughs in artificial general intelligence?"
+uv run python main.py -q "What are the latest breakthroughs in artificial general intelligence?"
 ```
 
-**Output**: Comprehensive report covering recent AGI developments, key research papers, major announcements, and expert opinions with citations.
-
-### Example 2: Business Intelligence
-
+### Business Intelligence
 ```bash
-python main.py -q "What are the emerging trends in electric vehicle adoption?" --save
+uv run python main.py -q "What are the emerging trends in electric vehicle adoption?" --save
 ```
 
-**Output**: Market analysis with statistics, industry trends, regional adoption rates, and future projections. Report saved to file.
-
-### Example 3: Scientific Research
-
+### Scientific Research
 ```bash
-python main.py -q "What are the most promising approaches to carbon capture technology?" --verbose
+uv run python main.py -q "What are the most promising approaches to carbon capture technology?" --verbose
 ```
 
-**Output**: Technical analysis of carbon capture methods with detailed thinking process visible.
+---
 
-## Advanced Usage
+## Customization
 
-### Customizing Prompts
+### Adjust Report Style
+Edit system prompt in `src/agents/supervisor.py`
 
-Edit the system prompts in:
-- `src/agents/supervisor.py` - Main coordinator logic
-- `src/agents/planning_agent.py` - Query decomposition strategy
-- `src/agents/web_search_retriever.py` - Search and synthesis approach
+### Modify Search Parameters
+Edit `src/agents/web_search_retriever.py`:
+- `num_results`: Results per query (default: 5-10)
+- `time_period`: Date filtering
+- `content_type`: Filter by type (news, research, blog)
 
-### Adjusting Search Parameters
-
-Modify Exa search parameters in `src/agents/web_search_retriever.py`:
-- `num_results`: Number of results per query (default: 5-10)
-- `time_period`: Date filtering (recent, past_week, past_month, past_year, any)
-- `content_type`: Filter by type (news, research paper, pdf, blog, etc.)
+---
 
 ## Troubleshooting
 
-### Configuration Errors
+| Issue | Solution |
+|-------|----------|
+| Missing API keys | Ensure `.env` exists and has all keys set |
+| API errors | Verify keys are valid, check rate limits |
+| Import errors | Run `uv sync` and use `uv run python main.py` |
 
-If you see "Missing required API keys":
-1. Ensure `.env` file exists (copy from `.env.example`)
-2. Verify all API keys are set correctly
-3. Check that API keys don't have extra spaces or quotes
-
-### API Errors
-
-If you encounter API errors:
-1. Verify your API keys are valid and active
-2. Check your API rate limits and quotas
-3. Ensure you have sufficient credits/balance
-
-### Import Errors
-
-If you see module import errors:
-1. Activate the virtual environment: `source .venv/bin/activate`
-2. Install dependencies: `uv sync`
-3. Ensure you're running from the project root directory
+---
 
 ## Performance
 
-- Average research query: 30-60 seconds
-- Depends on:
-  - Number of subqueries (3-5)
-  - Complexity of search results
-  - LLM response times
+- Average query time: **30-60 seconds**
+- Factors: number of subqueries (3-5), search complexity, LLM response times
 
-## Future Enhancements
-
-Potential improvements:
-- [ ] Support for additional search engines (Tavily, Perplexity)
-- [ ] PDF and document upload for context
-- [ ] Multi-turn conversations with follow-up questions
-- [ ] Export to different formats (PDF, Markdown, JSON)
-- [ ] Web UI interface
-- [ ] Caching and result persistence
-- [ ] Custom research templates
+---
 
 ## License
 
-MIT License - feel free to use and modify for your own projects.
+MIT License
+
+---
 
 ## Acknowledgments
 
 Built with:
-- [Minimax M2](https://www.minimax.io/) - Advanced reasoning model
+- [Minimax M2.1](https://www.minimax.io/) - Advanced reasoning model
 - [Exa](https://exa.ai/) - Neural web search
 - [Anthropic SDK](https://github.com/anthropics/anthropic-sdk-python) - API client
 - [OpenRouter](https://openrouter.ai/) - LLM routing

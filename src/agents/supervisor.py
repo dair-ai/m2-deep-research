@@ -1,4 +1,4 @@
-"""Supervisor Agent using Minimax M2 with interleaved thinking."""
+"""Supervisor Agent using Minimax M2.1 with interleaved thinking."""
 
 import anthropic
 from typing import List, Dict, Any
@@ -32,7 +32,7 @@ class SupervisorAgent:
         # Conversation history with interleaved thinking
         self.messages: List[Dict[str, Any]] = []
 
-        self.system_prompt = """You are a deep research coordinator specializing in comprehensive, academic-quality research reports. Your goal is to produce thorough, well-structured, in-depth analysis.
+        self.system_prompt = """You are a deep research coordinator specializing in comprehensive, academic-quality research reports. Your goal is to produce thorough, well-structured, in-depth analysis that is easy to read and navigate.
 
 You have access to the following tools:
 
@@ -50,6 +50,18 @@ Research Workflow:
 3. Synthesize a COMPREHENSIVE research report (15-30 pages equivalent) with the following structure:
 
 ## Required Report Structure:
+
+### Table of Contents
+   - Include a clickable table of contents at the very beginning
+   - Use markdown anchor links: `- [Section Name](#section-name)`
+   - List all major sections and key subsections
+   - This helps readers navigate long reports
+
+### Key Takeaways Box
+   - Immediately after ToC, add a highlighted summary box
+   - Use blockquote format (>) for visual distinction
+   - 3-5 bullet points with the most important findings
+   - Include key statistics or metrics if available
 
 ### Executive Summary (3-5 paragraphs)
    - Overview of research scope
@@ -100,6 +112,32 @@ Research Workflow:
 ### Sources and Citations
    - Comprehensive list of all sources with URLs
    - Organized by category or theme
+
+## CRITICAL: Readability and Formatting Guidelines
+
+### Reduce Text Density - Make Reports Scannable:
+- **Use bullet points liberally** - Convert long paragraphs into bullet lists where appropriate
+- **Add summary boxes** - Start each major section with a brief "Section Highlights" in blockquote format
+- **Use tables for comparisons** - When comparing items, frameworks, or options, use markdown tables
+- **Include visual breaks** - Add horizontal rules (---) between major sections
+- **Keep paragraphs short** - Maximum 4-5 sentences per paragraph
+- **Use bold for key terms** - Highlight important concepts, names, and statistics
+- **Add whitespace** - Include blank lines between sections for visual breathing room
+
+### Formatting Examples:
+- Section highlights box:
+  > **Section Highlights:**
+  > - Key point 1
+  > - Key point 2
+  > - Important statistic: X%
+
+- Comparison table:
+  | Aspect | Option A | Option B |
+  |--------|----------|----------|
+  | Feature 1 | Value | Value |
+
+- Key statistic callout:
+  > 📊 **Key Metric:** 70% improvement in X compared to Y
 
 ## Quality Guidelines:
 - Be EXTREMELY thorough and detailed - aim for 5-10x more content than a typical report
@@ -186,7 +224,7 @@ Research Workflow:
 
     def research(self, query: str, max_iterations: int = 10) -> str:
         """
-        Conduct research on a given query using Minimax M2 with interleaved thinking.
+        Conduct research on a given query using Minimax M2.1 with interleaved thinking.
 
         Args:
             query: Research question or topic
@@ -209,8 +247,8 @@ Research Workflow:
             iteration += 1
 
             try:
-                # Call Minimax M2 with streaming for long requests
-                console.print(f"[bold magenta][Iteration {iteration}][/bold magenta] [cyan]Calling Minimax M2...[/cyan]")
+                # Call Minimax M2.1 with streaming for long requests
+                console.print(f"[bold magenta][Iteration {iteration}][/bold magenta] [cyan]Calling Minimax M2.1...[/cyan]")
 
                 with self.client.messages.stream(
                     model=self.model,
